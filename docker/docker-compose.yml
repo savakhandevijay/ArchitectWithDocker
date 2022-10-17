@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+    nginx:
+        container_name: nginx
+        build:
+            context: ./
+            dockerfile: nginx.dockerfile
+        volumes:
+            - ${APP_PATH}:/var/www/html
+            - ${LOG_PATH}/nginx:/var/log/nginx
+        ports:
+            - ${HTTP_PORT}:80
+            - ${HTTPS_PORT}:443
+        restart: unless-stopped
+        networks:
+            - work
+    php:
+        container_name: php
+        hostname: ${HOST_NAME}
+        build:
+            context: ./
+            dockerfile: php.dockerfile
+            args:
+                SMTP_HOST: ${SMTP_HOST}
+                SMTP_PORT: ${SMTP_PORT}              
+        restart: unless-stopped        
+        volumes:
+            - ${APP_PATH}:/var/www/html
+            - ${LOG_PATH}/php:/var/log/php      
+        networks:
+            - work
+networks:
+    work:
+        driver: bridge
+        name: work

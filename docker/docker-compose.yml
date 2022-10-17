@@ -3,7 +3,7 @@ services:
     nginx:
         container_name: nginx
         build:
-            context: ./
+            context: .
             dockerfile: nginx.dockerfile
         volumes:
             - ${APP_PATH}:/var/www/html
@@ -18,7 +18,7 @@ services:
         container_name: php
         hostname: ${HOST_NAME}
         build:
-            context: ./
+            context: .
             dockerfile: php.dockerfile
             args:
                 SMTP_HOST: ${SMTP_HOST}
